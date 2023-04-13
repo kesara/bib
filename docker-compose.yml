@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5050:5000"
+      - "5050:80"
     depends_on:
       - redis
     environment:

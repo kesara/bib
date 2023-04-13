@@ -8,5 +8,4 @@ RUN pip install -r requirements.txt
 COPY app.py /app/
 COPY scripts/load-data.py /app/scripts/
 
-
-CMD ["python", "app.py"]
+CMD python3 app.py
