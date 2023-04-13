@@ -1,0 +1,22 @@
+---
+version: '3.3'
+services:
+  redis:
+    container_name: bib-redis
+    image: redis/redis-stack-server
+    ports:
+      - "6379:6379"
+  python:
+    container_name: bib-python
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./relaton-data-rfcs/:/app/relaton-data-rfcs/
+      - ./relaton-data-ids/:/app/relaton-data-ids/
