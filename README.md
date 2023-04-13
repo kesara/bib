@@ -21,5 +21,5 @@ docker exec -ti bib-python python scripts/load-data.py "redis://redis:6379/0" "/
 
 ## Save data
 ```
-docker exec -ti bib-redis redis-cli save
+docker exec -ti bib-redis redis-cli BGSAVE
 ```
