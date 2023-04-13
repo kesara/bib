@@ -45,6 +45,7 @@ for root, dirs, files in os.walk(data_dir):
                         'initials': initials,
                         'surname': surname,
                         })
+            abstract = None
             try:
                 abstract = str(data['abstract'][0]['content'])
             except KeyError:
