@@ -5,6 +5,7 @@ import redis
 
 
 DOC_INDEX = 'idx_doc'
+BASE_URL = 'https://devbox.amsl.com'
 app = Flask(__name__)
 redis_db = redis.from_url(os.environ['REDIS_URL'])
 
@@ -33,6 +34,7 @@ def search(term):
             'id': doc.id,
             'title': data['title'],
             'abstract': data['abstract'],
+            'json_url': f'{BASE_URL}/get/{doc.id}',
             })
     return jsonify({'documents': docs})
 
