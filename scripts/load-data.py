@@ -31,31 +31,42 @@ for root, dirs, files in os.walk(data_dir):
                     try:
                         fullname = str(author['person']['name']['completename']['content'])
                     except KeyError:
-                        pass
+                        fullname = None
                     try:
                         initials = str(author['person']['name']['given']['formatted_initials']['content'])
                     except KeyError:
-                        pass
+                        initials = None
                     try:
                         surname = str(author['person']['name']['surname']['content'])
                     except KeyError:
-                        pass
+                        surname = None
                     authors.append({
                         'fullname': fullname,
                         'initials': initials,
                         'surname': surname,
                         })
-            abstract = None
             try:
                 abstract = str(data['abstract'][0]['content'])
             except KeyError:
-                pass
+                abstract = None
+            try:
+                title = str(data['title'][0]['content'])
+            except KeyError:
+                title = None
+            try:
+                target = str(data['link'][0]['content']),
+            except KeyError:
+                target = None
+            try:
+                date = str(data['date'][0]['value'])
+            except KeyError:
+                date = None
 
             values = {
-                'title': str(data['title'][0]['content']),
-                'target': str(data['link'][0]['content']),
+                'title': title,
+                'target': target,
                 'abstract': abstract,
-                'date': str(data['date'][0]['value']),
+                'date': date,
                 'authors': authors,
                 }
 
