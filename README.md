@@ -18,3 +18,8 @@ docker exec -ti bib-redis redis-cli FT.CREATE idx_doc ON JSON SCHEMA $.title AS 
 docker exec -ti bib-python python scripts/load-data.py "redis://redis:6379/0" "/app/relaton-data-rfcs/data"
 docker exec -ti bib-python python scripts/load-data.py "redis://redis:6379/0" "/app/relaton-data-ids/data"
 ```
+
+## Save data
+```
+docker exec -ti bib-redis redis-cli save
+```

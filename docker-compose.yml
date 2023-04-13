@@ -6,6 +6,8 @@ services:
     image: redis/redis-stack-server
     ports:
       - "6379:6379"
+    volumes:
+      - ./redis-data/:/data
   python:
     container_name: bib-python
     build:
