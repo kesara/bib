@@ -4,7 +4,7 @@ BibXML PoC with redis
 ## Administration
 ### Run server
 ```
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 ### Create index
