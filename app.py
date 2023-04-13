@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from waitress import serve
 from redis.commands.search.query import Query
+from redis.exceptions import ResponseError
 import json
 import os
 import redis
@@ -12,12 +13,12 @@ app = Flask(__name__)
 redis_db = redis.from_url(os.environ['REDIS_URL'])
 
 
-# try to create index if missing
-try:
-    redis_db.execute_command(f'FT.CREATE {DOC_INDEX} ON JSON SCHEMA $.title AS title TEXT $.abstract AS abstract TEXT $.authors[:][*] AS name TEXT')
-except Exception:
-    pass
-
+def create_index():
+    # try to create index if missing
+    try:
+        redis_db.execute_command(f'FT.CREATE {DOC_INDEX} ON JSON SCHEMA $.title AS title TEXT $.abstract AS abstract TEXT $.authors[:][*] AS name TEXT')
+    except Exception:
+        pass
 
 
 @app.route('/')
@@ -38,7 +39,19 @@ def get(document_id):
 def search(query):
     offset = request.values.get('offset', 0)
     limit = request.values.get('limit', 1000)
-    results = redis_db.ft(DOC_INDEX).search(Query(query).paging(offset, limit))
+    try:
+        results = redis_db.ft(DOC_INDEX).search(Query(query).paging(offset, limit))
+    except ResponseError:
+        results = None
+        create_index()
+
+    if not results:
+        # try again
+        try:
+            results = redis_db.ft(DOC_INDEX).search(Query(query).paging(offset, limit))
+        except ResponseError as e:
+            return jsonify({'error': str(e)})
+
     total = results.total
     docs = []
     for doc in results.docs:
